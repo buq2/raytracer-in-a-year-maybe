@@ -1,6 +1,6 @@
 #pragma once
 #include <fstream>
-#include "vec.h"
+#include "vec.hh"
 
 class Image 
 {
@@ -39,12 +39,8 @@ class Image
         for (int row = 0; row < height; ++row) {
             auto rowptr = GetRow(row);
             for (int col = 0; col < width; ++col) {
-                auto pxl = &rowptr[col*3];
-                const auto ir = static_cast<int>(255.999 * pxl[0]);
-                const auto ig = static_cast<int>(255.999 * pxl[1]);
-                const auto ib = static_cast<int>(255.999 * pxl[2]);
-
-                file << ir << ' ' << ig << ' ' << ib << '\n';
+                const auto c = Color(&rowptr[col*3]);
+                WriteColor(file, c);
             }
         }
     }
