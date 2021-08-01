@@ -8,7 +8,10 @@ int main(int argc, char *argv[])
     Image im(width,width/aspect_ratio);
     Camera cam(aspect_ratio);
     //im.SetToTestImage();
-    cam.Render(im);
+    ObjectList objects;
+    objects.emplace_back(new Sphere(Vec3(0.0,0.0,-1.0),0.5));
+    
+    cam.Render(im, objects);
     im.Write("test.ppm");
     return 0;
 }
