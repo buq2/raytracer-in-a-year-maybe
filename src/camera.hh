@@ -29,18 +29,10 @@ class Camera
                 auto u = double(col)/(w-1);
                 const Ray r(origin_, part_dir + u*horizontal_);
 
-                if (IsHit(objects, r)) {
-                    // Hits one of the objects
-                    pxl[0] = 1.0;
-                    pxl[1] = 0.0;
-                    pxl[2] = 0.0;
-                } else {
-                    // Background
-                    const auto c = RayColor(r);
-                    pxl[0] = c[0];
-                    pxl[1] = c[1];
-                    pxl[2] = c[2];
-                }
+                const auto c = ColorByNormal(objects, r);
+                pxl[0] = c[0];
+                pxl[1] = c[1];
+                pxl[2] = c[2];
             }
         }
     }
@@ -50,6 +42,24 @@ class Camera
             if (o->Hit(r)) return true;
         }
         return false;
+    }
+
+    Color ColorByNormal(const ObjectList& objects, const Ray &r) {
+        Color out = RayColor(r);
+        double closest_distance = std::numeric_limits<double>::max();
+        for (const auto &o : objects) {
+            auto hit = o->Hit(r);
+            if (hit) {
+                auto dist = (r.Origin()-(*hit)).LengthSquared();
+                if (dist < closest_distance) {
+                    closest_distance = dist;
+                    auto n = o->NormalAt(*hit);
+                    out = (n+1.0).UnitVector();
+                } 
+            }
+        }
+
+        return out;
     }
  private:
     double viewport_height_{2.0};

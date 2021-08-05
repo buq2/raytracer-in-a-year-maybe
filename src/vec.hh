@@ -70,6 +70,9 @@ class Vec3
     Vec3 operator+(const Vec3& v) const {
         return Vec3(X()+v.X(), Y()+v.Y(), Z()+v.Z());
     }
+    Vec3 operator+(const double t) const {
+        return Vec3(X()+t, Y()+t, Z()+t);
+    }
     Vec3 operator-(const Vec3& v) const {
         return Vec3(X()-v.X(), Y()-v.Y(), Z()-v.Z());
     }
