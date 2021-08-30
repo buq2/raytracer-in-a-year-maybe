@@ -8,7 +8,14 @@ cmake --build build --parallel 12
 
 # cppcheck
 
-On Windows
+On git bash on Windows
 ```
 docker run --rm -v `pwd -W`:/data frankwolf/cppcheck --verbose --enable=all --inconclusive --language=c++ --suppress=missingIncludeSystem --suppress=unusedFunction --error-exitcode=1 src
 ```
+
+# clang-format
+
+On git bash on Windows
+```
+docker run --rm -it -v `pwd -W`:/workdir unibeautify/clang-format -i -style=Google **/{*.cpp,*.hh}
+``` 
