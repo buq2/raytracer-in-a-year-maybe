@@ -7,12 +7,14 @@ class Image
  public:
     int width{0};
     int height{0};
-
     double *data{0};
+
     Image(int width, int height)
         :
         width(width), height(height), data(new double[width*height*3]) 
         {}
+
+    Image(const Image &img) = delete;
     
     ~Image() 
     {
@@ -22,7 +24,7 @@ class Image
         height = 0;
     }
 
-    int StridePixels() 
+    int StridePixels() const
     {
         return width*3;
     }
@@ -32,7 +34,7 @@ class Image
         return &data[row*StridePixels()];
     }
 
-    void Write(const std::string &fname) 
+    void Write(const std::string &fname)
     {
         std::ofstream file(fname);
         file << "P3\n" << width << ' ' << height << "\n255\n";

@@ -8,7 +8,7 @@ class Vec3
  public:
     Vec3() : data_{0} {}
     Vec3(double x, double y, double z) : data_{x,y,z} {}
-    Vec3(const double *data) : data_{data[0], data[1], data[2]} {}
+    explicit Vec3(const double *data) : data_{data[0], data[1], data[2]} {}
     auto X() const {return data_[0];} 
     auto Y() const {return data_[1];} 
     auto Z() const {return data_[2];} 

@@ -30,7 +30,7 @@ class Sphere
     : public Object
 {
  public:
-    Sphere(const Vec3 center, const double radius) : center_(center), radius_(radius) {}
+    Sphere(const Vec3& center, const double radius) : center_(center), radius_(radius) {}
     virtual std::optional<HitStruct> Hit(const Ray& r) {
         const auto oc = r.Origin() - center_;
         const auto a = r.Direction().LengthSquared();

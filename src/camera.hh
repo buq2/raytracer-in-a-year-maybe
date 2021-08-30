@@ -7,7 +7,7 @@
 class Camera
 {
  public:
-    Camera(double aspect_ratio) 
+    explicit Camera(double aspect_ratio)
         : 
         viewport_height_(2.0),
         viewport_width_(aspect_ratio*viewport_height_),
@@ -37,14 +37,14 @@ class Camera
         }
     }
  private:
-    bool IsHit(const ObjectList& objects, const Ray &r) {
+    static bool IsHit(const ObjectList& objects, const Ray &r) {
         for (const auto &o : objects) {
             if (o->Hit(r)) return true;
         }
         return false;
     }
 
-    Color ColorByNormal(const ObjectList& objects, const Ray &r) {
+    static Color ColorByNormal(const ObjectList& objects, const Ray &r) {
         Color out = RayColor(r);
         double closest_distance = std::numeric_limits<double>::max();
         for (const auto &o : objects) {
