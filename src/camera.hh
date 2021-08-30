@@ -50,10 +50,11 @@ class Camera
         for (const auto &o : objects) {
             auto hit = o->Hit(r);
             if (hit) {
-                auto dist = (r.Origin()-(*hit)).LengthSquared();
+                const auto loc = hit->location;
+                auto dist = (r.Origin()-loc).LengthSquared();
                 if (dist < closest_distance) {
                     closest_distance = dist;
-                    auto n = o->NormalAt(*hit);
+                    const auto n = hit->normal;
                     out = (n+1.0).UnitVector();
                 } 
             }
