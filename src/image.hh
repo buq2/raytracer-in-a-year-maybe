@@ -1,5 +1,6 @@
 #pragma once
 #include <fstream>
+#include <vector>
 #include "vec.hh"
 
 class Image {
@@ -23,6 +24,25 @@ class Image {
   int StridePixels() const { return width * 3; }
 
   double *GetRow(int row) { return &data[row * StridePixels()]; }
+
+  std::vector<uint8_t> GetAsUint8Vector() {
+    std::vector<uint8_t> out(width * height * 3);
+    for (int row = 0; row < height; ++row) {
+      auto rowptr = GetRow(row);
+      for (int col = 0; col < width; ++col) {
+        const auto c = Color(&rowptr[col * 3]);
+
+        out[row * width * 3 + col * 3 + 0] =
+            static_cast<uint8_t>(c[0] * 255.999);
+        out[row * width * 3 + col * 3 + 1] =
+            static_cast<uint8_t>(c[1] * 255.999);
+        out[row * width * 3 + col * 3 + 2] =
+            static_cast<uint8_t>(c[2] * 255.999);
+      }
+    }
+
+    return out;
+  }
 
   void Write(const std::string &fname) {
     std::ofstream file(fname);

@@ -3,6 +3,7 @@ project(raytracer VERSION 1.0.0 LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 17)
 
 #enable_testing()
+include(cmake/conan_config.cmake)
 
 add_subdirectory(src)
 

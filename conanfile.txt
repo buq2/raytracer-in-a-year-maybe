@@ -1,0 +1,8 @@
+[requires]
+    imgui/1.84.2
+    sdl/[>2.0.0]
+    glew/[>2.0.0]
+
+[generators]
+    cmake
+    cmake_find_package

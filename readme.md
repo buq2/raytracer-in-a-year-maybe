@@ -6,6 +6,11 @@ cmake --build build --parallel 12
 # ./build/src/Debug/raytracer.exe
 ```
 
+# Release build Windows
+```
+cmake --build build --parallel 12 --config Release
+```
+
 # cppcheck
 
 On git bash on Windows
