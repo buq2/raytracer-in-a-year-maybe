@@ -16,6 +16,7 @@ struct SceneCreator {
   Image im{width, static_cast<int>(width / aspect_ratio)};
   Texture texture;
   float previous_command_time_{0.0f};
+  int current_item = 0;
 
   SceneCreator() {
     objects.emplace_back(new Sphere(Vec3(0.0, 0.0, -1.0), 0.5));
@@ -51,6 +52,20 @@ struct SceneCreator {
 
     if (ImGui::Button("Add sphere")) {
       objects.emplace_back(new Sphere(Vec3(pos_x, pos_y, pos_z), radius));
+    }
+
+    ImGui::BeginListBox("Objects");
+    auto getter = [](void *data, int idx, const char **text) -> bool {
+      static const char *str{"Obj"};
+      *text = str;
+      return true;
+    };
+    ImGui::ListBox("", &current_item, getter, 0, objects.size());
+    ImGui::EndListBox();
+    if (ImGui::Button("Delete item")) {
+      if (objects.size() > static_cast<size_t>(current_item)) {
+        objects.erase(objects.begin() + current_item);
+      }
     }
 
     if (ImGui::Button("Render")) {

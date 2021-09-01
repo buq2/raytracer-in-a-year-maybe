@@ -29,17 +29,13 @@ using namespace gl;
 #endif
 
 class TexturePrivate {
-  public:
-    GLuint image_texture_;
+ public:
+  GLuint image_texture_;
 };
 
-Texture::Texture()
-  : p_(new TexturePrivate)
-{
+Texture::Texture() : p_(new TexturePrivate) {}
 
-}
-
-Texture::~Texture() { 
+Texture::~Texture() {
   DestroyTexture();
   delete p_;
   p_ = nullptr;
@@ -48,8 +44,8 @@ Texture::~Texture() {
 void Texture::Display() {
   if (texture_created_) {
     ImGui::Image(
-      (void *)(intptr_t)p_->image_texture_,
-      ImVec2(static_cast<float>(width_), static_cast<float>(height_)));
+        (void*)(intptr_t)p_->image_texture_,
+        ImVec2(static_cast<float>(width_), static_cast<float>(height_)));
   }
 }
 
@@ -61,7 +57,7 @@ void Texture::DestroyTexture() {
 }
 
 void Texture::SetTexture(const int image_width, const int image_height,
-                  const unsigned char *image_data) {
+                         const unsigned char* image_data) {
   if (!texture_created_) {
     glGenTextures(1, &p_->image_texture_);
   }
@@ -84,7 +80,7 @@ void Texture::SetTexture(const int image_width, const int image_height,
   glPixelStorei(GL_UNPACK_ROW_LENGTH, 0);
 #endif
   glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, image_width, image_height, 0, GL_RGB,
-                GL_UNSIGNED_BYTE, image_data);
+               GL_UNSIGNED_BYTE, image_data);
 }
 
 class GuiWindowPrivate {
