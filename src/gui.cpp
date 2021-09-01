@@ -28,6 +28,65 @@ using namespace gl;
 #include IMGUI_IMPL_OPENGL_LOADER_CUSTOM
 #endif
 
+class TexturePrivate {
+  public:
+    GLuint image_texture_;
+};
+
+Texture::Texture()
+  : p_(new TexturePrivate)
+{
+
+}
+
+Texture::~Texture() { 
+  DestroyTexture();
+  delete p_;
+  p_ = nullptr;
+}
+
+void Texture::Display() {
+  if (texture_created_) {
+    ImGui::Image(
+      (void *)(intptr_t)p_->image_texture_,
+      ImVec2(static_cast<float>(width_), static_cast<float>(height_)));
+  }
+}
+
+void Texture::DestroyTexture() {
+  if (texture_created_) {
+    glDeleteTextures(1, &p_->image_texture_);
+    texture_created_ = false;
+  }
+}
+
+void Texture::SetTexture(const int image_width, const int image_height,
+                  const unsigned char *image_data) {
+  if (!texture_created_) {
+    glGenTextures(1, &p_->image_texture_);
+  }
+  texture_created_ = true;
+  width_ = image_width;
+  height_ = image_height;
+  glBindTexture(GL_TEXTURE_2D, p_->image_texture_);
+
+  // Setup filtering parameters for display
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S,
+                  GL_CLAMP_TO_EDGE);  // This is required on WebGL for non
+                                      // power-of-two textures
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T,
+                  GL_CLAMP_TO_EDGE);  // Same
+
+  // Upload pixels into texture
+#if defined(GL_UNPACK_ROW_LENGTH) && !defined(__EMSCRIPTEN__)
+  glPixelStorei(GL_UNPACK_ROW_LENGTH, 0);
+#endif
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, image_width, image_height, 0, GL_RGB,
+                GL_UNSIGNED_BYTE, image_data);
+}
+
 class GuiWindowPrivate {
  public:
   SDL_Window* window;
@@ -197,8 +256,8 @@ void GuiWindow::EndDraw() {
   if (auto_resize_) {
     int top, left, bottom, right;
     SDL_GetWindowBordersSize(p_->window, &top, &left, &bottom, &right);
-    int w = std::max<int>(50, win_size.x + left + right);
-    int h = std::max<int>(50, win_size.y + top + bottom);
+    int w = std::max<int>(50, static_cast<int>(win_size.x) + left + right);
+    int h = std::max<int>(50, static_cast<int>(win_size.y) + top + bottom);
     SDL_SetWindowSize(p_->window, w, h);
   }
 }

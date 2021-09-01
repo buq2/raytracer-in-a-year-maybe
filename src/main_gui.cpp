@@ -5,62 +5,6 @@
 #include "image.hh"
 #include "imgui.h"
 
-class Texture {
- public:
-  ~Texture() { DestroyTexture(); }
-
-  GLuint GetTexture() { return image_texture_; }
-
-  void Display() {
-    if (texture_created_) {
-      ImGui::Image(
-          (void *)(intptr_t)image_texture_,
-          ImVec2(static_cast<float>(width_), static_cast<float>(height_)));
-    }
-  }
-
-  void SetTexture(const int image_width, const int image_height,
-                  const unsigned char *image_data) {
-    DestroyTexture();
-
-    glGenTextures(1, &image_texture_);
-    texture_created_ = true;
-    width_ = image_width;
-    height_ = image_height;
-    glBindTexture(GL_TEXTURE_2D, image_texture_);
-
-    // Setup filtering parameters for display
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S,
-                    GL_CLAMP_TO_EDGE);  // This is required on WebGL for non
-                                        // power-of-two textures
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T,
-                    GL_CLAMP_TO_EDGE);  // Same
-
-    // Upload pixels into texture
-#if defined(GL_UNPACK_ROW_LENGTH) && !defined(__EMSCRIPTEN__)
-    glPixelStorei(GL_UNPACK_ROW_LENGTH, 0);
-#endif
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, image_width, image_height, 0, GL_RGB,
-                 GL_UNSIGNED_BYTE, image_data);
-  }
-
- private:
-  void DestroyTexture() {
-    if (texture_created_) {
-      glDeleteTextures(1, &image_texture_);
-      texture_created_ = false;
-    }
-  }
-
- private:
-  int width_{0};
-  int height_{0};
-  bool texture_created_{false};
-  GLuint image_texture_;
-};
-
 struct SceneCreator {
   float pos_x{0.0f};
   float pos_y{0.0f};

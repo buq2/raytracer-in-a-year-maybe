@@ -4,6 +4,27 @@
 #include <string>
 
 class GuiWindowPrivate;
+class TexturePrivate;
+
+class Texture {
+ public:
+  Texture();
+  ~Texture();
+
+  void Display();
+
+  void SetTexture(const int image_width, const int image_height,
+                  const unsigned char *image_data);
+
+ private:
+  void DestroyTexture();
+
+ private:
+  TexturePrivate *p_{nullptr};
+  int width_{0};
+  int height_{0};
+  bool texture_created_{false};
+};
 
 class GuiWindow {
  public:
