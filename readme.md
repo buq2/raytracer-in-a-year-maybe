@@ -11,6 +11,11 @@ cmake --build build --parallel 12
 cmake --build build --parallel 12 --config Release
 ```
 
+# Docker build
+```
+docker build -t raytracer .
+```
+
 # cppcheck
 
 On git bash on Windows
