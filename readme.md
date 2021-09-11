@@ -16,6 +16,11 @@ cmake --build build --parallel 12 --config Release
 docker build -t raytracer .
 ```
 
+# Docker build without Conan
+```
+docker build -f Dockerfile_without_conan -t raytracer_without_conan .
+```
+
 # cppcheck
 
 On git bash on Windows
