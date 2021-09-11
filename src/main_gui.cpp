@@ -54,14 +54,22 @@ struct SceneCreator {
       objects.emplace_back(new Sphere(Vec3(pos_x, pos_y, pos_z), radius));
     }
 
+#if IMGUI_VERSION_NUM > 18000
     ImGui::BeginListBox("Objects");
+#else
+    ImGui::ListBoxHeader("Objects");
+#endif
     auto getter = [](void *data, int idx, const char **text) -> bool {
       static const char *str{"Obj"};
       *text = str;
       return true;
     };
     ImGui::ListBox("", &current_item, getter, 0, objects.size());
+#if IMGUI_VERSION_NUM > 18000
     ImGui::EndListBox();
+#else
+    ImGui::ListBoxFooter();
+#endif
     if (ImGui::Button("Delete item")) {
       if (objects.size() > static_cast<size_t>(current_item)) {
         objects.erase(objects.begin() + current_item);
