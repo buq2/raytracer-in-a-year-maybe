@@ -30,8 +30,8 @@ struct SceneCreator {
           start_(std::chrono::high_resolution_clock::now()) {}
 
     ~Timer() {
-      auto finish = std::chrono::high_resolution_clock::now();
-      std::chrono::duration<double, std::milli> elapsed = finish - start_;
+      const auto finish = std::chrono::high_resolution_clock::now();
+      const auto elapsed = finish - start_;
       *out_time_ = static_cast<float>(
           std::chrono::duration_cast<std::chrono::milliseconds>(elapsed)
               .count());
@@ -39,7 +39,7 @@ struct SceneCreator {
 
    private:
     float *out_time_{0};
-    std::chrono::steady_clock::time_point start_;
+    decltype(std::chrono::high_resolution_clock::now()) start_;
   };
 
   void CreateScene() {
